@@ -1,0 +1,95 @@
+
+.register-Container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #000000a7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-Wrapper {
+    width: 500px;
+    height: 380px;
+    background-color: #1f1f1f;
+    color:#1f1f1f;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    border-radius: 25px;
+}
+
+.register-Close {
+    color: #ffffff;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: x-large;
+    cursor: pointer;
+}
+
+.register-Close:hover{
+    transform: scale(1.5s);
+}
+
+.register-Title {
+    color: #ffffff;
+    text-align: center;
+    animation: fadeIn 0.50s ease-in-out;
+}
+.register-Details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 0vh;
+}
+
+.register-InputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-Input {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.register-Input::placeholder {
+    color: #aaa;
+}
+
+.register-Input:focus {
+    background-color: #444;
+}
+
+.register-Wrapper button {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    color: #000000;
+    height: 40px;
+    width: 100px;
+    cursor: pointer;
+    font-size:large;
+}
+.register-Wrapper button:hover{
+    background-color:#000000;
+    color: #ffffff;
+    transform: scale(1.05);
+}

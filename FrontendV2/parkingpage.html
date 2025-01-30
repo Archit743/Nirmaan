@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Canteen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .header-icons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.5rem 1.5rem;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .add-to-cart {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .add-to-cart:hover {
+            background: #1d4ed8;
+        }
+
+        #cart-count {
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            position: relative;
+            top: -10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">Campus Hub</a>
+        <div class="header-icons">
+            <div style="position: relative;">
+                <button onclick="toggleCart()">🛒</button>
+                <span id="cart-count">0</span>
+            </div>
+            <button>👤</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            <img src="" alt="Classic Burger">
+            <div class="card-content">
+                <h2>Classic Burger</h2>
+                <p>Juicy beef patty with fresh lettuce, tomatoes, and our special sauce</p>
+            </div>
+            <div class="card-footer">
+                <span class="price">$8.99</span>
+                <button class="add-to-cart" onclick="addToCart('Classic Burger', 8.99)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="" alt="Caesar Salad">
+            <div class="card-content">
+                <h2>Caesar Salad</h2>
+                <p>Crisp romaine lettuce, parmesan cheese, croutons, and Caesar dressing</p>
+            </div>
+            <div class="card-footer">
+                <span class="price">$6.99</span>
+                <button class="add-to-cart" onclick="addToCart('Caesar Salad', 6.99)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="" alt="Margherita Pizza">
+            <div class="card-content">
+                <h2>Margherita Pizza</h2>
+                <p>Fresh mozzarella, tomatoes, and basil on our house-made crust</p>
+            </div>
+            <div class="card-footer">
+                <span class="price">$12.99</span>
+                <button class="add-to-cart" onclick="addToCart('Margherita Pizza', 12.99)">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let cart = [];
+        let cartCount = 0;
+
+        function addToCart(itemName, price) {
+            cart.push({ name: itemName, price: price });
+            cartCount++;
+            updateCartCount();
+            
+            // Add animation to the button
+            const button = event.target;
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function toggleCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert('Cart Total: $${total.toFixed(2)}');
+        }
+    </script>
+</body>
+</html>

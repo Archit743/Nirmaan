@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #333;
+  }
+  
+  header {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    color: #0096cc;
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+  
+  .nav-links a {
+    color: #666;
+    text-decoration: none;
+    margin-left: 2rem;
+  }
