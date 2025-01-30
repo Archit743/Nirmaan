@@ -1,0 +1,37 @@
+{
+  "name": "campus-services-app",
+  "version": "1.0.0",
+  "description": "A platform to automate and digitize common campus services like printing requests and canteen orders.",
+  "main": "backend/app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js",
+    "frontend": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "cors": "^2.8.5",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
+  },
+  "devDependencies": {
+    "react-scripts": "4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/campus-services-app.git"
+  },
+  "keywords": [
+    "campus",
+    "services",
+    "automation",
+    "digitalization"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
