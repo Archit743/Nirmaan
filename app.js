@@ -6,13 +6,13 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const fs = require("fs");
-
+require('dotenv').config();
 
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/canteenDB', {
+mongoose.connect(process.env.MONGOURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -21,7 +21,14 @@ const userSchema = new mongoose.Schema({
     name: String,
     email: String,
     password: String,
-    role: String
+    
+});
+
+const adminSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    password: String,
+    
 });
 
 const menuItemSchema = new mongoose.Schema({
@@ -44,6 +51,7 @@ const orderSchema = new mongoose.Schema({
     paymentStatus: { type: String, default: 'Pending' }
 });
 
+const adminModel = mongoose.model('Admin', adminSchema);
 const MenuItem = mongoose.model('MenuItem', menuItemSchema);
 const Order = mongoose.model('Order', orderSchema);
 const userModel = mongoose.model('User', userSchema);
@@ -62,6 +70,18 @@ app.get('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const token = jwt.sign({ email: user.email, userid: user._id }, "shhhh", { expiresIn: "1h" });
+    res.json({ message: 'Login successful', token, user });
+});
+
+app.post('/admin/login', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await adminModel.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
