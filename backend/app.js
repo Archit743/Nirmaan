@@ -6,13 +6,13 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const fs = require("fs");
-require('dotenv').config();
+// require('dotenv').config();
 
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGOURI, {
+mongoose.connect(/*process.env.MONGOURI*/ `mongodb://127.0.0.1:27017/Nirman`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
