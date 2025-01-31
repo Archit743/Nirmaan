@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const fs = require("fs");
 require('dotenv').config();
-
+// for cors isuue
 app.use(cors());
 app.use(bodyParser.json());
 
