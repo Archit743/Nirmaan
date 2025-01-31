@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
-
+import Header from "../components/Header";
 
 function ParkingSlot() {
     const [parkingSlots, setParkingSlots] = useState([]);
@@ -84,7 +83,7 @@ function ParkingSlot() {
     if (loading) {
       return (
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-xl font-roboto">Loading...</div>
+          <div className="text-xl font-roboto text-black">Loading...</div>
         </div>
       );
     }
@@ -99,7 +98,7 @@ function ParkingSlot() {
             </h1>
             <button
               onClick={() => window.history.back()}
-              className="bg-black text-white px-4 py-2 rounded font-roboto"
+              className="bg-black text-white px-4 py-2 rounded font-roboto w-auto inline grid"
             >
               Back to Sections
             </button>
@@ -124,17 +123,17 @@ function ParkingSlot() {
                   key={slot.id}
                   onClick={() => slot.isAvailable && setSelectedSlot(slot)}
                   className={`
-                    p-3 rounded-lg text-center cursor-pointer border
+                    p-3 rounded-lg text-center cursor-pointer border text-black
                     ${
                       slot.isAvailable
                         ? selectedSlot?.id === slot.id
-                          ? "border-[#0096FF] border-2"
-                          : "border-gray-200 hover:border-[#0096FF]"
-                        : "bg-gray-100 cursor-not-allowed"
+                          ? "border-[#000000] border-8"
+                          : "border-gray-800 hover:border-[#000000]"
+                        : "bg-gray-300 cursor-not-allowed"
                     }
                   `}
                 >
-                  <p className="font-roboto text-sm">{slot.id}</p>
+                  <p className="font-roboto text-sm text-black">{slot.id}</p>
                 </div>
               ))}
             </div>
@@ -142,17 +141,17 @@ function ParkingSlot() {
   
           {selectedSlot && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-between items-center">
-              <p className="font-roboto">Selected Spot: {selectedSlot.id}</p>
+              <p className="font-roboto text-black">Selected Spot: {selectedSlot.id}</p>
               <div className="flex gap-4">
                 <button
                   onClick={() => setSelectedSlot(null)}
-                  className="px-4 py-2 border rounded font-roboto"
+                  className="px-4 py-2 border rounded font-roboto text-black w-auto inline grid"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleBookSlot}
-                  className="bg-[#0096FF] text-white px-4 py-2 rounded font-roboto"
+                  className="bg-[#0096FF] text-white px-4 py-2 rounded font-roboto w-auto inline grid"
                 >
                   Confirm Booking
                 </button>
@@ -164,3 +163,4 @@ function ParkingSlot() {
     );
   }
   
+export default ParkingSlot;

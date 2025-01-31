@@ -1,11 +1,14 @@
 "use client";
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import Header from '../components/Header'
 
 function ParkingPage() {
   const [selectedArea, setSelectedArea] = useState(null);
   const [hoveredArea, setHoveredArea] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const parkingAreas = [
     {
@@ -38,15 +41,12 @@ function ParkingPage() {
   );
 
   const handleAreaClick = (area) => {
-    setSelectedArea(area);
-    const element = document.getElementById(`area-${area.id}`);
-    if (element) {
-      element.classList.add("scale-effect");
-      setTimeout(() => {
-        element.classList.remove("scale-effect");
-      }, 200);
-    }
+    setShouldRedirect(true);
   };
+
+  if (shouldRedirect) {
+    return <Navigate to="/parkingSlot" />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 text-gray-900">
@@ -65,16 +65,16 @@ function ParkingPage() {
       <div className="max-w-7xl mx-auto">
         <nav className="flex justify-between items-center mb-12 relative">
           <div className="text-2xl font-bold text-blue-600 cursor-pointer hover:opacity-80 transition-opacity">
-            CampusHub
+            <Header></Header>
           </div>
 
           <div className="hidden md:flex gap-6">
-            <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 w-auto inline-grid">
+            {/* <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 w-auto inline-grid">
               Profile
             </button>
             <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 w-auto inline-grid">
               Your Receipts
-            </button>
+            </button> */}
           </div>
         </nav>
 
