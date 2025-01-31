@@ -1,0 +1,12 @@
+
+.top-grid{
+    display: grid;
+    grid-template-rows: 60vh;
+    grid-template-columns: 1fr 1fr;
+}
+main {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100%; /* Ensures main takes at least the full viewport height */
+}
