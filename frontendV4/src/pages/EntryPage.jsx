@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import LogIn from '../components/Login';
 import Register from '../components/Register';
 import '../Styles/EntryPage.css';

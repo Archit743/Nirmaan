@@ -10,6 +10,7 @@ import CanteenPage from './pages/CanteenPage';
 import LandingPage from './pages/LandingPage';
 import ParkingPage from './pages/ParkingPage';
 import PrintPage from './pages/PrintPage';
+import ParkingSlot from './pages/ParkingSlot';
 // import AdminMenuPage from './pages/AdminMenuPage'
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
       {/* <Route path="/admin" element={<AdminMenuPage />} /> */}
         <Route path="/home" element={<LandingPage />} />
         <Route path="/parking" element={<ParkingPage />} />
+        <Route path="/parkingSlot" element={<ParkingSlot />} />
         <Route path="/print" element={<PrintPage />} />
         <Route path="/canteen" element={<CanteenPage />} />
       </Routes>

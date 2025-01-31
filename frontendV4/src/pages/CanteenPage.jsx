@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useState,useEffect } from "react";
+import Header from "../components/Header";
 
 function CanteenPage() {
   const [menuItems, setMenuItems] = useState([]);
@@ -40,7 +41,7 @@ function CanteenPage() {
         setCartItems(data.items || []);
       }
     } catch (err) {
-      setError("Failed to fetch cart");
+      setError();
     }
   };
   const handleAddToCart = async (item) => {
@@ -73,7 +74,7 @@ function CanteenPage() {
           description: "Eggs, bacon, toast, and hash browns",
           price: 12.99,
           category: "breakfast",
-          image: "/images/breakfast.jpg",
+          image: "src/assets/breakfast.jpg",
         },
         {
           id: 2,
@@ -81,7 +82,7 @@ function CanteenPage() {
           description: "Fresh romaine lettuce with grilled chicken",
           price: 10.99,
           category: "lunch",
-          image: "/images/salad.jpg",
+          image: "src/assets/salad.jpg",
         },
         {
           id: 3,
@@ -89,7 +90,7 @@ function CanteenPage() {
           description: "Pasta with rich meat sauce",
           price: 14.99,
           category: "dinner",
-          image: "/images/pasta.jpg",
+          image: "src/assets/pasta.jpg",
         },
         {
           id: 4,
@@ -97,7 +98,7 @@ function CanteenPage() {
           description: "Blend of seasonal fruits",
           price: 5.99,
           category: "beverages",
-          image: "/images/smoothie.jpg",
+          image: "src/assets/smoothie.jpg",
         },
         {
           id: 5,
@@ -105,7 +106,7 @@ function CanteenPage() {
           description: "Freshly baked cookies",
           price: 3.99,
           category: "snacks",
-          image: "/images/cookies.jpg",
+          image: "src/assets/cookies.jpg",
         },
         {
           id: 6,
@@ -113,7 +114,7 @@ function CanteenPage() {
           description: "Served with seasonal vegetables",
           price: 18.99,
           category: "dinner",
-          image: "/images/salmon.jpg",
+          image: "src/assets/salmon.jpg",
         },
       ];
       setMenuItems(dummyItems);
@@ -170,6 +171,7 @@ function CanteenPage() {
   return (
     <div className="min-h-screen bg-white relative">
       {/* Increased mt-16 to mt-24 for more space at top */}
+        <Header/>
       <div className="container mx-auto px-4 py-12 mt-40">
         {successMessage && (
           <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-out">
@@ -177,6 +179,8 @@ function CanteenPage() {
           </div>
         )}
 
+
+        {/* Increased mb-16 to mb-20 for more spacing */}
         <div className="fixed top-4 right-4 z-40">
           <button
             onClick={() => setIsCartOpen(true)}
@@ -190,8 +194,6 @@ function CanteenPage() {
             )}
           </button>
         </div>
-
-        {/* Increased mb-16 to mb-20 for more spacing */}
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-20 font-roboto text-black pt-8">
           Canteen Menu
         </h1>
@@ -203,7 +205,7 @@ function CanteenPage() {
                   type="text"
                   name="search"
                   placeholder="Search menu items..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -211,7 +213,7 @@ function CanteenPage() {
               </div>
             </div>
             <select
-              className="px-4 py-2 border border-gray-300 rounded-lg"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-black"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >

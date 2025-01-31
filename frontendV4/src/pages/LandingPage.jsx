@@ -8,7 +8,7 @@ function LandingPage() {
 
   const services = [
     { title: "Canteen Service", icon: "fa-utensils", description: "Order food and beverages from our campus canteen", path: "/canteen" },
-    { title: "Printing Service", icon: "fa-print", description: "Print your documents quickly and efficiently", path: "/printing" },
+    { title: "Printing Service", icon: "fa-print", description: "Print your documents quickly and efficiently", path: "/print" },
     { title: "Parking Service", icon: "fa-car", description: "Reserve and manage your parking space seamlessly", path: "/parking" },
   ];
 
