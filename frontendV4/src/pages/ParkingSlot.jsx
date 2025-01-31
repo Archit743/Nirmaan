@@ -89,9 +89,10 @@ function ParkingSlot() {
     }
   
     return (
+      <div>
       <div className="min-h-screen bg-white">
-        <div className="container mx-auto px-4 py-8">
             <Header/>
+        <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold font-roboto text-black">
               Parking Section p1
@@ -160,6 +161,7 @@ function ParkingSlot() {
           )}
         </div>
       </div>
+      </div> 
     );
   }
   

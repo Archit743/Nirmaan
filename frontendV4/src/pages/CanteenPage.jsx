@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 
 function CanteenPage() {
@@ -29,7 +29,7 @@ function CanteenPage() {
   }, [successMessage]);
 
   const fetchCart = async () => {
-    try {
+    
       const response = await fetch("/api/get-cart", {
         method: "POST",
         body: JSON.stringify({ userId: "user456" }),
@@ -39,32 +39,37 @@ function CanteenPage() {
         setError(data.error);
       } else {
         setCartItems(data.items || []);
-      }
-    } catch (err) {
-      setError();
-    }
+      
+    } 
   };
+
   const handleAddToCart = async (item) => {
     try {
-      const response = await fetch("/api/add-to-cart", {
-        method: "POST",
-        body: JSON.stringify({
-          menuItemId: item.id,
-          quantity: 1,
-          userId: "user456",
-        }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        setError(data.error);
+      const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
+      if (existingItem) {
+        // If item already exists in cart, increase quantity
+        const updatedCart = cartItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+        setCartItems(updatedCart);
       } else {
-        setSuccessMessage("Added to cart!");
-        fetchCart();
+        // If item is not in cart, add it
+        const newItem = { ...item, quantity: 1 };
+        setCartItems([...cartItems, newItem]);
       }
+      setSuccessMessage(`${item.name} added to cart!`);
     } catch (err) {
-      setError("Failed to add to cart");
     }
   };
+
+  const handleRemoveFromCart = (itemId) => {
+    const updatedCart = cartItems.filter((item) => item.id !== itemId);
+    setCartItems(updatedCart);
+    setSuccessMessage("Item removed from cart!");
+  };
+
   const fetchMenuItems = async () => {
     try {
       const dummyItems = [
@@ -124,6 +129,7 @@ function CanteenPage() {
       setLoading(false);
     }
   };
+
   const filteredItems = menuItems.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -137,7 +143,10 @@ function CanteenPage() {
     setPaymentLoading(true);
     setError(null);
     try {
-      const total = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+      const total = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
       const response = await fetch("/api/process-payment", {
         method: "POST",
         body: JSON.stringify({
@@ -160,6 +169,11 @@ function CanteenPage() {
     }
   };
 
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -170,8 +184,7 @@ function CanteenPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Increased mt-16 to mt-24 for more space at top */}
-        <Header/>
+      <Header />
       <div className="container mx-auto px-4 py-12 mt-40">
         {successMessage && (
           <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-out">
@@ -179,8 +192,7 @@ function CanteenPage() {
           </div>
         )}
 
-
-        {/* Increased mb-16 to mb-20 for more spacing */}
+        {/* Cart Button */}
         <div className="fixed top-4 right-4 z-40">
           <button
             onClick={() => setIsCartOpen(true)}
@@ -194,6 +206,63 @@ function CanteenPage() {
             )}
           </button>
         </div>
+
+        {/* Cart Popup */}
+        {isCartOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-black">Your Cart</h2>
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 text-black"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              {cartItems.length === 0 ? (
+                <p className="text-gray-500 text-black">Your cart is empty.</p>
+              ) : (
+                <>
+                  <div className="space-y-4">
+                    {cartItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-center text-black"
+                      >
+                        <div>
+                          <h3 className="font-bold text-black">{item.name}</h3>
+                          <p className="text-sm text-gray-500 text-black">
+                            ${item.price.toFixed(2)} x {item.quantity}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveFromCart(item.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-6">
+                    <p className="text-lg font-bold text-black">
+                      Total: ${totalPrice.toFixed(2)}
+                    </p>
+                    <button
+                      onClick={handlePayment}
+                      disabled={paymentLoading}
+                      className="bg-black text-white px-6 py-2 rounded-full w-full mt-4 hover:bg-gray-800 transition-colors duration-300 w-auto inline grid"
+                    >
+                      {paymentLoading ? "Processing..." : "Checkout"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-20 font-roboto text-black pt-8">
           Canteen Menu
         </h1>
