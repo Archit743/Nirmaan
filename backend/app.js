@@ -6,30 +6,30 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const fs = require("fs");
-// require('dotenv').config();
+require('dotenv').config();
 
 app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect(/*process.env.MONGOURI*/ `mongodb://127.0.0.1:27017/Nirman`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
-    
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    username: { type: String, unique: true, required: true }, // Add this field
 });
 
 const adminSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
-    
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    username: { type: String, unique: true, required: true }, // Add this field
 });
+
 
 const menuItemSchema = new mongoose.Schema({
     name: String,
@@ -94,27 +94,46 @@ app.post('/admin/login', async (req, res) => {
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+app.post("/register", async (req, res) => {
+    let { name, email, password, username } = req.body; // Make sure 'username' is included
 
-app.post("/register" , async (req,res) =>{
-    let {name,email, password} = req.body;
+    if (!username) {
+        return res.status(400).send("Username is required");
+    }
 
-    let user = await userModel.findOne({email});
-    if(user) return res.status(500).send("user already registered");
+    let user = await userModel.findOne({ email });
+    if (user) {
+        return res.status(500).send("User already registered");
+    }
 
-    bcrypt.genSalt(10,(err, salt) =>{
-        bcrypt.hash(password, salt, async  (err, hash) =>{
-            let user = await userModel.create({
-                name,
-                email,
-                password:hash,
-            });
-            let token = jwt.sign({email: email, userid: user._id},"shhhh");
-            res.cookie("token",token);
-            res.send("index");
-            console.log(name); 
-        })
-   })
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) return res.status(500).send("Error generating salt");
+
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if (err) return res.status(500).send("Error hashing password");
+
+            try {
+                let newUser = await userModel.create({
+                    name,
+                    email,
+                    username, // Ensure the username is being saved
+                    password: hash,
+                });
+
+                console.log("User Created:", newUser);
+
+                let token = jwt.sign({ email: email, userid: newUser._id }, "shhhh");
+                res.cookie("token", token);
+                res.send("User registered successfully");
+            } catch (error) {
+                console.error("Error saving user:", error);
+                res.status(500).send("Failed to save user. Error: " + error.message);
+            }
+        });
+    });
 });
+
+
 
 //---------------------------------CANTEEN----------------------------------------//
 
