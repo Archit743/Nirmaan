@@ -16,7 +16,7 @@ const Register_user = async (setOpen, setOpen2) => {
     };
 
     try {
-        const response = await fetch('http://localhost:5000/register', { // Correct endpoint
+        const response = await fetch('https://nirmaan-yvtd.onrender.com/register', { // Correct endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
