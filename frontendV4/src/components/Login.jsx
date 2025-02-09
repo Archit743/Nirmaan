@@ -2,50 +2,55 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Login.css';
 
-const LogIn = ({ setOpen }) => {
+const LogIn = ({ setOpen, userType }) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const Verify_Credentials = async (navigate) => {
-        const email = document.getElementById("email_input").value;
-        const password = document.getElementById("password_input").value;
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
+        // Basic validation
         if (!email || !password) {
-            alert('Please fill in all fields');
+            setError('Please fill in all fields');
             return;
         }
 
         setLoading(true);
-
-        const loginData = {
-            email: email,
-            password: password,
-        };
+        setError('');
 
         try {
-            const response = await fetch('https://nirmaan-yvtd.onrender.com/login', {
+            const endpoint = userType === 'student' ? '/login' : '/admin/login';
+            
+            const response = await fetch(`https://nirmaan-yvtd.onrender.com${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(loginData),
+                body: JSON.stringify({ email, password }),
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const data = await response.json();
-                console.error('Login Failed: ', data);
-                alert('Login Failed: ' + (data.message || 'Unknown error'));
-            } else {
-                const data = await response.json();
-                console.log('Login Successful: ', data);
-                localStorage.setItem('jwt', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                alert('Login Successful');
-                navigate('/home');
+                throw new Error(data.message || 'Login failed');
             }
+
+            // Store authentication data
+            localStorage.setItem('jwt', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            // Redirect based on user type
+            if (userType === 'student') {
+                navigate('/home');
+            } else {
+                navigate('/admin');
+            }
+
         } catch (error) {
-            console.error('Fetch Error: ', error);
-            alert('An unexpected error occurred');
+            setError(error.message || 'An error occurred during login');
         } finally {
             setLoading(false);
         }
@@ -54,19 +59,44 @@ const LogIn = ({ setOpen }) => {
     return (
         <div className="login-Container">
             <div className="login-Wrapper">
-                <div className="login-Close" onClick={() => setOpen(false)}>X</div>
-                <h1 className="login-Title">LogIn</h1>
-                <div className="login-Details">
+                <div className="login-Close" onClick={() => setOpen(false)}>×</div>
+                <h1 className="login-Title">{userType === 'student' ? 'Student Login' : 'Admin Login'}</h1>
+                
+                {error && <div className="login-Error">{error}</div>}
+
+                <form onSubmit={handleLogin} className="login-Details">
                     <div className="login-InputContainer">
-                        <input className="login-Input" type="email" placeholder="Enter your email ID" id='email_input' />
+                        <input
+                            type="email"
+                            placeholder="Enter your email ID"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={loading}
+                            className="login-Input"
+                            required
+                        />
                     </div>
+
                     <div className="login-InputContainer">
-                        <input className="login-Input" type="password" placeholder="Enter your password" id='password_input' />
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            disabled={loading}
+                            className="login-Input"
+                            required
+                        />
                     </div>
-                </div>
-                <button onClick={() => Verify_Credentials(navigate)} disabled={loading}>
-                    {loading ? 'Logging in...' : 'Submit'}
-                </button>
+
+                    <button 
+                        type="submit" 
+                        className="login-SubmitButton"
+                        disabled={loading}
+                    >
+                        {loading ? 'Logging in...' : 'Submit'}
+                    </button>
+                </form>
             </div>
         </div>
     );
